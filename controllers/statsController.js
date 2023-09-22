@@ -1,0 +1,89 @@
+// statsController.js
+
+const Record = require('../models/record');
+const Book = require('../models/book');
+const User = require('../models/user');
+const moment = require('moment');
+
+// Get library statistics based on a specified time span
+const getLibraryStatistics = async (req, res) => {
+  try {
+    const { timespan } = req.params;
+
+    // Calculate start date based on the specified time span
+    const startDate = moment().subtract(timespan, 'days').toDate();
+
+    // Calculate statistics
+    const highestLentBook = await getHighestLentBook(startDate);
+    const mostActiveUser = await getMostActiveUser(startDate);
+    const oldestBook = await getOldestBook();
+    const newestBook = await getNewestBook();
+    const mostAvailableBook = await getMostAvailableBook();
+    const totalUsers = await User.countDocuments();
+    const totalBooks = await Book.countDocuments();
+    const totalLentBooks = await Record.countDocuments({ lending_date: { $gte: startDate } });
+
+    // Return the statistics
+    res.json({
+      highestLentBook,
+      mostActiveUser,
+      oldestBook,
+      newestBook,
+      mostAvailableBook,
+      totalUsers,
+      totalBooks,
+      totalLentBooks,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Helper function to get the highest lent book
+const getHighestLentBook = async (startDate) => {
+  const result = await Record.aggregate([
+    { $match: { lending_date: { $gte: startDate } } },
+    { $group: { _id: '$book_id', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: 1 },
+    { $lookup: { from: 'books', localField: '_id', foreignField: '_id', as: 'book' } },
+    { $unwind: '$book' },
+    { $project: { title: '$book.title', count: 1 } },
+  ]);
+
+  return result[0];
+};
+
+// Helper function to get the most active user
+const getMostActiveUser = async (startDate) => {
+  const result = await Record.aggregate([
+    { $match: { lending_date: { $gte: startDate } } },
+    { $group: { _id: '$user_id', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: 1 },
+    { $lookup: { from: 'users', localField: '_id', foreignField: '_id', as: 'user' } },
+    { $unwind: '$user' },
+    { $project: { username: '$user.username', count: 1 } },
+  ]);
+
+  return result[0];
+};
+
+// Helper function to get the oldest book
+const getOldestBook = async () => {
+  return Book.findOne().sort({ publication_date: 1 });
+};
+
+// Helper function to get the newest book
+const getNewestBook = async () => {
+  return Book.findOne().sort({ publication_date: -1 });
+};
+
+// Helper function to get the most available book
+const getMostAvailableBook = async () => {
+  return Book.findOne().sort({ available_copies: -1 });
+};
+
+module.exports = {
+  getLibraryStatistics,
+};
