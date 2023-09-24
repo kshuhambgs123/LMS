@@ -34,7 +34,7 @@ const getBookById = async (req, res) => {
     const query = 'SELECT * FROM books WHERE id = $1';
     const values = [bookId];
     const result = await pool.query(query, values);
-
+    
     if (result.rows.length === 0) {
       // If no book with the specified ID is found, return a 404 response
       return res.status(404).json({ error: 'Book not found' });
