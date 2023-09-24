@@ -8,12 +8,9 @@ router.get('/', recordCont.getAllRecords);
 
 router.get('/:id', recordCont.getRecordById);
 
-
 router.post('/', recordCont.createRecord);
 
-
 router.put('/:id', recordCont.updateRecordById);
-
 
 router.delete('/:id', recordCont.deleteRecordById);
 

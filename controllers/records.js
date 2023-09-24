@@ -11,20 +11,7 @@ const pool = new Pool({
 // Controller function to get all records
 const getAllRecords = async (req, res) => {
   try {
-    // const query = `
-    //   SELECT
-    //     records.recordId,
-    //     records.issue_date,
-    //     records.return_date,
-    //     books.isbn,
-    //     users.id
-    //   FROM
-    //     records
-    //   INNER JOIN
-    //     books ON records.isbn = books.isbn
-    //   INNER JOIN
-    //     users ON records.id = users.id
-    // `;
+    
     const query = `select * from records`;
     const { rows } = await pool.query(query);
     // console.log(rows);
