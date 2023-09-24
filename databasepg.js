@@ -8,13 +8,10 @@ const client = new Client({
     database: "shubhamkumar"
 })
 
-client.connect();
-
-client.query(`Select * from book`, (err,res)=>{
-if(!err){
-    console.log(res.rows);
-}else{
-    console.log(err.message);
-}
-client.end();
+client.connect()
+.then(() => {
+    console.log('Connected to PostgreSQL database');
 })
+.catch(err => {
+    console.error('Error connecting to PostgreSQL database', err);
+});
