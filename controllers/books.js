@@ -129,10 +129,6 @@ const updateBookById = async (req, res) => {
   }
 };
 
-module.exports = { updateBookById };
-
-
-
 module.exports={
     getAllBooks,
     addBook,
