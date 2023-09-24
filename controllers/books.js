@@ -58,7 +58,7 @@ const addBook = async (req,res) =>{
         const reqBody = req.body;
         const result  = await pool.query(
             "insert into books (title, author, isbn, subject) values($1, $2, $3, $4)", [reqBody.title, reqBody.author, reqBody.isbn, reqBody.subject], (error,results)=>{
-                if(error)throw error;
+                if(error) throw error; 
                 res.status(201).send("book created successfully.")
             }
         );

@@ -21,20 +21,6 @@ const getAllUsers = async (req, res) => {
 };
 
 // Controller function to create a new user
-// const createUser = async (req, res) => {
-//   const { userId, name, category, registrationDate } = req.body;
-
-//   try {
-//     const insertQuery = 'INSERT INTO users (name, category, registrationDate) VALUES ($1, $2, $3) RETURNING *';
-//     const values = [name, category, registrationDate];
-//     const result = await pool.query(insertQuery, values);
-//     res.status(201).json(result.rows[0]);
-//   } catch (error) {
-//     console.error('Error creating user:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
-
 const createUser = async (req,res) =>{
     try{
         // console.log(reqBody.body);
