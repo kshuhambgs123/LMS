@@ -26,7 +26,7 @@ const createUser = async (req,res) =>{
         // console.log(reqBody.body);
         const reqBody = req.body;
         const result  = await pool.query(
-            "insert into users (name, category, registration_date) values($1, $2, $3)", [reqBody.name, reqBody.category, reqBody.registration_date], (error,results)=>{
+            "insert into users (name, category, registration_date, user_id) values($1, $2, $3, $4)", [reqBody.name, reqBody.category, reqBody.registration_date, reqBody.user_id], (error,results)=>{
                 if(error)throw error;
                 res.status(201).send("user created successfully.")
             }
