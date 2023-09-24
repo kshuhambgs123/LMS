@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const booksRouter = require('./routes/book')
 const usersRouter = require('./routes/user')
 const recordRouter = require('./routes/record')
+const paymentRouter = require('./routes/payment')
 
 app.use(bodyParser.urlencoded({extended:true})) // MIDDLEWARE FN.
 app.use(bodyParser.json())
@@ -16,7 +17,7 @@ app.use(bodyParser.json())
 app.use('/books', booksRouter);
 app.use('/users',usersRouter);
 app.use('/records',recordRouter);
-
+app.use('/payments',paymentRouter);
 
 
 
