@@ -1,5 +1,5 @@
 // config/database.js
-
+// Sample checking database conection
 const { response } = require('express');
 
 const Pool = require('pg').Pool;

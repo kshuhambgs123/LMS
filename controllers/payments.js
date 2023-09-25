@@ -23,7 +23,7 @@ const createPayment = async (req, res) => {
     }
 };
 
-// Controller function to get all payments
+// Controller function to fetch list of  payments
 const getAllPayments = async (req, res) => {
     try {
         const query = 'SELECT * FROM payments';
@@ -35,7 +35,7 @@ const getAllPayments = async (req, res) => {
     }
 };
 
-// Controller function to get a payment by ID
+// Controller function to fetch a payment by ID
 const getPaymentById = async (req, res) => {
     const paymentId = parseInt(req.params.id);
 

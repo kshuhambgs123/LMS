@@ -7,6 +7,5 @@ module.exports={
         database: 'shubhamkumar', // Your database name
         port:5432
       }
-    // Other environment configurations (e.g., "test" and "production")
   }
   
