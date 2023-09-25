@@ -3,6 +3,15 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user_authentication");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const { Pool } = require('pg');
+const pool = new Pool({
+  dialect: 'postgres',
+  host: 'localhost',
+  username: 'shubhamkumar',
+  password: 'shubham123',
+  database: 'shubhamkumar',
+  port: 5432,
+});
 
 // Assigning users to the variable User
 // const User = db.user_credentials;
@@ -71,8 +80,15 @@ const { email, password } = req.body;
        //if password matches wit the one in the database
        //go ahead and generate a cookie for the user
        res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-       console.log("user", JSON.stringify(user, null, 2));
+    // console.log("user", JSON.stringify(user, null, 2));
        console.log(token);
+       const lgn_query = 'select login_count from user_credentials where user_id=$1';
+        const values = [user.userid];
+        const resp = await pool.query(lgn_query,values);
+        const login_count = resp.rows[0].login_count
+        const query = 'UPDATE user_credentials SET login_count =  $1 WHERE user_id=$2';
+        const new_values = [login_count+1,user.userid];
+        const result = await pool.query(query,new_values)
        //send user data
        return res.status(201).send(token);
      } else {
