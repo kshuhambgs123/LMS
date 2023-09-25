@@ -22,7 +22,11 @@ const user_credential  = sequelize.define('user_credentials', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    
+    login_count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0, // Set the default value to 0 for newly created books
+      },
 },{timestamps: false},)
 
 // Ensure the table is created or updated

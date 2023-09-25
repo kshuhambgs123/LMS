@@ -13,6 +13,7 @@ const usersRouter = require('./routes/user')
 const recordRouter = require('./routes/record')
 const paymentRouter = require('./routes/payment')
 const usercredRouter = require('./routes/user_authentication')
+const statsRouter = require('./routes/statistics')
 
 app.use(bodyParser.urlencoded({extended:true})) // MIDDLEWARE FN.
 app.use(bodyParser.json())
@@ -22,6 +23,7 @@ app.use('/users',authenticate.authenticateToken, usersRouter);
 app.use('/records',authenticate.authenticateToken, recordRouter);
 app.use('/payments', authenticate.authenticateToken, paymentRouter);
 app.use('/profile',usercredRouter);
+app.use('/stats', authenticate.authenticateToken, statsRouter);
 
 
 const port = 1000;
