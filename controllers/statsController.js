@@ -103,7 +103,7 @@ const getTotalUser = async (req, res) => {
   const query = 'select count(*) from user_credentials';
   const resp = await pool.query(query);
   console.log("result->", resp.rows);
-  const result = resp.rows;
+  const result = resp.rows[0];
   res.status(200).json(result);
 }
 
