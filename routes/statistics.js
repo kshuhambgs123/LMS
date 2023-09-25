@@ -6,5 +6,6 @@ const statsController = require('../controllers/statsController');
 router.get('/library/:timespan', statsController.getLibraryStatistics);
 router.get('/most-active-user', statsController.getMostActiveUser);
 router.get('/total-user', statsController.getTotalUser);
+router.get('/highest-lent_book', statsController.getHighestLentBook);
 
 module.exports = router;

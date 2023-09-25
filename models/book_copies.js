@@ -14,14 +14,6 @@ const Bookcopy = sequelize.define('book_copies', {
     allowNull: false,
     unique: true,
   },
-  createdAt: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.fn('NOW'),
-},
-updatedAt: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.fn('NOW'),
-},
  },
  {  
   timestamps: false,

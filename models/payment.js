@@ -40,7 +40,7 @@ const Payment = sequelize.define('payments', {
 }, {
   // Define table name if you want it to be different from the model name
   // tableName: 'payments',
-  // timestamps: true, // Set to true if you want to include timestamps (createdAt, updatedAt)
+  timestamps: false, // Set to true if you want to include timestamps (createdAt, updatedAt)
 });
 
 

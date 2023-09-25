@@ -50,18 +50,14 @@ const getLibraryStatistics = async (req, res) => {
 };
 
 // Helper function to get the highest lent book
-const getHighestLentBook = async (startDate) => {
-  const result = await Record.aggregate([
-    { $match: { lending_date: { $gte: startDate } } },
-    { $group: { _id: '$book_id', count: { $sum: 1 } } },
-    { $sort: { count: -1 } },
-    { $limit: 1 },
-    { $lookup: { from: 'books', localField: '_id', foreignField: '_id', as: 'book' } },
-    { $unwind: '$book' },
-    { $project: { title: '$book.title', count: 1 } },
-  ]);
+const getHighestLentBook = async (req,res) => {
+  // we can use select max(lent_count) from books
+  const query = 'select * from books order by lent_count desc';
+  const resp = await pool.query(query);
+  // console.log("result->", resp.rows);
+  const result = resp.rows[0];
 
-  return result[0];
+  res.status(200).json(result);
 };
 
 // Helper function to get the most active user
@@ -111,4 +107,5 @@ module.exports = {
   getLibraryStatistics,
   getMostActiveUser,
   getTotalUser,
+  getHighestLentBook,
 };
