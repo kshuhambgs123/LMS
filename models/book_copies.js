@@ -9,11 +9,11 @@ const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
 
 const Bookcopy = sequelize.define('book_copies', {
   copy_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, field: 'copy_id' },
-  isbn: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    unique: true,
-  },
+//   isbn: {
+//     type: DataTypes.INTEGER,
+//     allowNull: false,
+//     unique: true,
+//   },
  },
  {  
   timestamps: false,

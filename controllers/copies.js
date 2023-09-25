@@ -1,4 +1,6 @@
 const Book_Copy = require('../models/book_copies');
+const Book = require('../models/book');
+const { login } = require('./userController');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   dialect: 'postgres', // Use the PostgreSQL dialect
@@ -34,7 +36,7 @@ const getBookCopyById = async (req, res) => {
   
     try {
       // Query the database to get the book by ID
-      const query = 'SELECT * FROM book_copies WHERE book_id = $1';
+      const query = 'SELECT * FROM book_copies WHERE copy_id = $1';
       const values = [bookId];
       const result = await pool.query(query, values);
       
@@ -44,7 +46,7 @@ const getBookCopyById = async (req, res) => {
       }
   
       // If a book with the specified ID is found, return it as JSON
-      res.status(200).json(result.rows[0]);
+      res.status(200).json(result.rows);
     } catch (error) {
       // Handle any errors that occur during the database query
       console.error('Error fetching bookcopy by book_id:', error);
@@ -57,10 +59,19 @@ const getBookCopyById = async (req, res) => {
 // Controller function to Insert a book_copy
 const addCopies = async (req,res) =>{
     try{
-        // console.log(reqBody.body);
+        const bookId = parseInt(req.body.book_id);
+        const copies_avail = 'select copies_available from books where id=$1';
+        const values = [bookId];
+        const resp = await pool.query(copies_avail,values);
+        const copies_available = resp.rows[0].copies_available
+        const query = 'UPDATE books SET copies_available =  $1 WHERE id=$2';
+        const new_values = [copies_available+1,bookId];
+        const respp = await pool.query(query,new_values);
+
+        console.log("updated count");
         const reqBody = req.body;
         const result  = await pool.query(
-            "insert into book_copies (isbn, book_id) values($1, $2)", [reqBody.isbn, reqBody.book_id], (error,results)=>{
+            "insert into book_copies (book_id) values($1)", [reqBody.book_id], (error,results)=>{
                 if(error) throw error; 
                 res.status(201).send("book_copies created successfully.")
             }
@@ -73,10 +84,25 @@ const addCopies = async (req,res) =>{
 
 
 // Controller function to delete a book by ID
-    const deleteBook = async (req, res) => {
+    const deleteBookByCopyId = async (req, res) => {
     const bookId = req.params.id;
   
     try {
+        // const bookid = parseInt(req.body.book_id);
+        const new_query = 'select book_id from book_copies where copy_id=$1';
+        const new_value = [bookId];
+        const response = await pool.query(new_query,new_value);
+        const book_id = response.rows[0].book_id;
+        const copies_avail = 'select copies_available from books where id=$1';
+        const values = [book_id];
+        const resp = await pool.query(copies_avail,values);
+        const copies_available = resp.rows[0].copies_available
+        const query = 'UPDATE books SET copies_available =  $1 WHERE id=$2';
+        const new_values = [copies_available-1,book_id];
+        const respp = await pool.query(query,new_values);
+        
+        console.log("updated count");
+
       const client = await pool.connect();
       await client.query('BEGIN'); // Start a transaction
   
@@ -108,5 +134,5 @@ module.exports={
     getAllBookCopy,
     addCopies,
     getBookCopyById,
-    deleteBook
+    deleteBookByCopyId
 }
