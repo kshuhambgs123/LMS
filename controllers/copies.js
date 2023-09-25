@@ -1,4 +1,4 @@
-// const Book = require('../models/book');
+const Book_Copy = require('../models/book_copies');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   dialect: 'postgres', // Use the PostgreSQL dialect
@@ -34,7 +34,7 @@ const getBookCopyById = async (req, res) => {
   
     try {
       // Query the database to get the book by ID
-      const query = 'SELECT * FROM books WHERE book_id = $1';
+      const query = 'SELECT * FROM book_copies WHERE book_id = $1';
       const values = [bookId];
       const result = await pool.query(query, values);
       

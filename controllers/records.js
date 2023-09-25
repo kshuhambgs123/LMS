@@ -7,6 +7,7 @@ const pool = new Pool({
   database: 'shubhamkumar',
   port: 5432,
 });
+const book = require("../models/book")
 
 // Controller function to fetch list of records
 const getAllRecords = async (req, res) => {
@@ -24,29 +25,45 @@ const getAllRecords = async (req, res) => {
 // Controller function to create/insert a new record
 const createRecord = async (req,res) =>{
     try{
-        // console.log(reqBody.body);
-        const reqBody = req.body;
-        console.log("reqbody",reqBody);
-        const result  = await pool.query(
-            "insert into records (issue_date, return_date, book_id, users_id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.book_id, reqBody.users_id], (error,results)=>{
-              if (error) {
-                if (error.constraint === "records_isbn_fkey") {
-                  // Handle the foreign key constraint violation
-                  res.status(400).send("The provided ISBN does not exist in the referenced table.");
-                } else {
-                  // Handle other errors
-                  console.error('Error creating data:', error);
-                  res.status(500).send("An error occurred while creating the record.");
-                }
-              } else {
-                res.status(201).send("Record created successfully.");
-              }
-            }
-          );
-        } catch (error) {
-          console.error('Error creating data:', error);
-          res.status(500).send("Error occurred while creating the record.");
+      // console.log(reqBody.body);
+      const reqBody = req.body;
+      console.log("reqbody",reqBody);
+      const lent_query = 'select lent_count from books where id = $1';
+      const values = [reqBody.users_id];
+      const response = await pool.query(lent_query, values);
+      const lent_count = response.rows[0].lent_count;
+      const insert_query = await pool.query(
+        "update books set lent_count = $1 where id=$2", [lent_count+1,reqBody.users_id ], (error, results)=>{
+          if (error) {
+            // res.status(500).send(error);
+            console.log("Unable to update record: ", error);
+          } else {
+            console.log("lent_count updated successfully!");
+          }
         }
+      )
+      const result  = await pool.query(
+        "insert into records (issue_date, return_date, book_id, users_id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.book_id, reqBody.users_id], (error,results)=>{
+          if (error) {
+            if (error.constraint === "records_isbn_fkey") {
+              // Handle the foreign key constraint violation
+              res.status(400).send("The provided ISBN does not exist in the referenced table.");
+            } else {
+              // Handle other errors
+              console.error('Error creating data:', error);
+              res.status(500).send("An error occurred while creating the record.");
+            }
+          } else {
+            res.status(201).send("Record created successfully.");
+          }
+        }
+      );
+      
+    } catch (error) {
+      console.error('Error creating data:', error);
+      res.status(500).send("Error occurred while creating the record.");
+    }
+         
 }
 
 // Controller function to fetch a record by its ID
