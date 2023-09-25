@@ -27,7 +27,7 @@ const Book = sequelize.define('books', {
   }, copies_available: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0, // Set the default value to 0 for newly created books
+    defaultValue: 1, // Set the default value to 0 for newly created books
   },
   lent_count: {
     type: DataTypes.INTEGER,

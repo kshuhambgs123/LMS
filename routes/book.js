@@ -13,7 +13,7 @@ router.get('/copies/:id', bookCopy.getBookCopyById);
 router.post('/copies', bookCopy.addCopies);
 
 // DELETE /books/:id
-router.delete('copies/:id', bookCopy.deleteBook);
+router.delete('/copies/:id', bookCopy.deleteBookByCopyId);
 
 // Add more routes as needed
 // router.put('/:id',bookCopy.updateBookById);
