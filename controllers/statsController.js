@@ -91,8 +91,13 @@ const getNewestBook = async (req,res) => {
 };
 
 // Helper function to get the most available book
-const getMostAvailableBook = async () => {
-  return Book.findOne().sort({ available_copies: -1 });
+const getMostAvailableBook = async (req, res) => {
+  const query = 'select * from books order by copies_available desc';
+  const resp = await pool.query(query);
+  // console.log("result->", resp.rows);
+  const result = resp.rows[0];
+
+  res.status(200).json(result);
 };
 
 // get total users
@@ -111,4 +116,5 @@ module.exports = {
   getHighestLentBook,
   getOldestBook,
   getNewestBook,
+  getMostAvailableBook,
 };

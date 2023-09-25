@@ -9,5 +9,6 @@ router.get('/total-user', statsController.getTotalUser);
 router.get('/highest-lent-book', statsController.getHighestLentBook);
 router.get('/oldest-book', statsController.getOldestBook);
 router.get('/latest-book', statsController.getNewestBook);
+router.get('/most-available-book', statsController.getMostAvailableBook);
 
 module.exports = router;
