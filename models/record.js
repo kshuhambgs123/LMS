@@ -1,6 +1,6 @@
 const { DataTypes, Sequelize } = require('sequelize');
-const book = require('./book');
-const user = require('./user')
+const books = require('./book');
+const users = require('./user');
 
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
   host: 'localhost',
@@ -8,7 +8,7 @@ const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
 });
 
 const Record = sequelize.define('records', {
-  recordId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, field: 'recordId' },
+  record_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, field: 'record_id' },
   issue_date: {
     type: DataTypes.STRING, // Store date as a string
     allowNull: false,
@@ -62,8 +62,8 @@ const Record = sequelize.define('records', {
   timestamps: false,
 });
 // Define the many-to-one (belongsTo) relationship
-Record.belongsTo(book, { foreignKey: 'isbn' });
-Record.belongsTo(user, {foreignKey: 'id'});
+Record.belongsTo(books, { foreignKey: 'isbn' });
+Record.belongsTo(users, {foreignKey: 'id'});
 
 // Ensure the table is created or updated
 sequelize.sync()

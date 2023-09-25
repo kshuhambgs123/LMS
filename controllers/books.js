@@ -9,6 +9,7 @@ const pool = new Pool({
   port:5432
 });
 
+// Controller function to fetch  a list of book
 const getAllBooks = async (req, res) => {
     try {
       const query = 'SELECT * FROM books';
@@ -50,14 +51,13 @@ const getBookById = async (req, res) => {
 };
 
 
-// "INSERT INTO user1 (name,email) VALUES($1,$2) RETURNING *", [name, email]
-
+// Controller function to Insert a book 
 const addBook = async (req,res) =>{
     try{
         // console.log(reqBody.body);
         const reqBody = req.body;
         const result  = await pool.query(
-            "insert into books (title, author, isbn, subject) values($1, $2, $3, $4)", [reqBody.title, reqBody.author, reqBody.isbn, reqBody.subject], (error,results)=>{
+            "insert into books (title, author, isbn, subject, copies_available) values($1, $2, $3, $4, $5)", [reqBody.title, reqBody.author, reqBody.isbn, reqBody.subject, reqBody.copies_available], (error,results)=>{
                 if(error) throw error; 
                 res.status(201).send("book created successfully.")
             }
@@ -69,6 +69,8 @@ const addBook = async (req,res) =>{
 }
 
 
+
+// Controller function to delete a book by ID
 const deleteBook = async (req, res) => {
     const bookId = req.params.id;
   
@@ -94,16 +96,16 @@ const deleteBook = async (req, res) => {
     } catch (error) {
       console.error('Error deleting book:', error);
       res.status(500).json({ error: 'Internal server error' });
-     } finally {
-      client.release(); // Release the client back to the pool
-    }
+    //  } finally {
+    //   client.release(); // Release the client back to the pool
+     }
   };
 
 
 // Controller function to update a book by ID
 const updateBookById = async (req, res) => {
   const bookId = req.params.id; // Extract the book ID from the request parameters
-  const { title, author, isbn, subject } = req.body; // Assuming you're sending the updated book data in the request body
+  const { title, author, isbn, subject, copies_available } = req.body; // Assuming you're sending the updated book data in the request body
 
   try {
     // Check if the book with the specified ID exists
@@ -117,8 +119,8 @@ const updateBookById = async (req, res) => {
     }
 
     // Update the book in the database
-    const updateQuery = 'UPDATE books SET title = $1, author = $2, isbn = $3, subject = $4 WHERE id = $5';
-    const updateValues = [title, author, isbn, subject, bookId];
+    const updateQuery = 'UPDATE books SET title = $1, author = $2, isbn = $3, subject = $4, copies_available = $5 WHERE id = $6';
+    const updateValues = [title, author, isbn, subject, copies_available, bookId];
     await pool.query(updateQuery, updateValues);
 
     res.status(200).json({ message: 'Book updated successfully' });

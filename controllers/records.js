@@ -8,10 +8,9 @@ const pool = new Pool({
   port: 5432,
 });
 
-// Controller function to get all records
+// Controller function to fetch list of records
 const getAllRecords = async (req, res) => {
   try {
-    
     const query = `select * from records`;
     const { rows } = await pool.query(query);
     // console.log(rows);
@@ -22,7 +21,7 @@ const getAllRecords = async (req, res) => {
   }
 };
 
-// Controller function to create a new record
+// Controller function to create/insert a new record
 const createRecord = async (req,res) =>{
     try{
         // console.log(reqBody.body);
@@ -30,20 +29,29 @@ const createRecord = async (req,res) =>{
         console.log("reqbody",reqBody);
         const result  = await pool.query(
             "insert into records (issue_date, return_date, isbn, id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.isbn, reqBody.id], (error,results)=>{
-                if(error)throw error;
-                res.status(201).send("record created successfully.")
-            } 
-        );
-    }catch (error) {
-      console.error('Error creating data:', error);
-      return error;
-    }
+              if (error) {
+                if (error.constraint === "records_isbn_fkey") {
+                  // Handle the foreign key constraint violation
+                  res.status(400).send("The provided ISBN does not exist in the referenced table.");
+                } else {
+                  // Handle other errors
+                  console.error('Error creating data:', error);
+                  res.status(500).send("An error occurred while creating the record.");
+                }
+              } else {
+                res.status(201).send("Record created successfully.");
+              }
+            }
+          );
+        } catch (error) {
+          console.error('Error creating data:', error);
+          res.status(500).send("Error occurred while creating the record.");
+        }
 }
 
-// Controller function to get a record by its ID
+// Controller function to fetch a record by its ID
 const getRecordById = async (req, res) => {
   const recordId = req.params.id;
-
   try {
     const query = `
       SELECT
@@ -79,7 +87,6 @@ const getRecordById = async (req, res) => {
 const updateRecordById = async (req, res) => {
   const recordId = req.params.id;
   const { issue_date, return_date, isbn, id } = req.body;
-
   try {
     const checkQuery = 'SELECT * FROM records WHERE recordId = $1';
     const checkValues = [recordId];
