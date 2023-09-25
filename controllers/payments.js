@@ -13,8 +13,8 @@ const createPayment = async (req, res) => {
     try {
         const reqBody = req.body;
         const result = await pool.query(
-            "INSERT INTO payments (amount, payment_date, isbn, id) VALUES ($1, $2, $3, $4)",
-            [reqBody.amount, reqBody.payment_date, reqBody.isbn, reqBody.id]
+            "INSERT INTO payments (amount, payment_date, book_id, users_id) VALUES ($1, $2, $3, $4)",
+            [reqBody.amount, reqBody.payment_date, reqBody.book_id, reqBody.users_id]
         );
         res.status(201).json({ message: 'Payment created successfully.' });
     } catch (error) {
@@ -58,11 +58,11 @@ const getPaymentById = async (req, res) => {
 // Controller function to update a payment by ID
 const updatePaymentById = async (req, res) => {
     const paymentId = parseInt(req.params.id);
-    const { amount, payment_date, isbn, id } = req.body;
+    const { amount, payment_date, book_id, users_id } = req.body;
 
     try {
-        const query = 'UPDATE payments SET amount = $1, payment_date = $2, isbn = $3, id = $4 WHERE paymentid = $5';
-        const values = [amount, payment_date, isbn, id, paymentId];
+        const query = 'UPDATE payments SET amount = $1, payment_date = $2, book_id = $3, users_id = $4 WHERE paymentid = $5';
+        const values = [amount, payment_date, book_id, users_id, paymentId];
         await pool.query(query, values);
 
         res.status(200).json({ message: 'Payment updated successfully' });

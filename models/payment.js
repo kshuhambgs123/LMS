@@ -44,8 +44,8 @@ const Payment = sequelize.define('payments', {
 });
 
 
-Payment.belongsTo(book, { foreignKey: 'isbn' });
-Payment.belongsTo(user, {foreignKey: 'id'});
+Payment.belongsTo(book, { foreignKey: 'book_id' });
+Payment.belongsTo(user, {foreignKey: 'users_id'});
 // Sync the model with the database to create the table
 sequelize.sync()
   .then(() => {
