@@ -62,15 +62,6 @@ const getHighestLentBook = async (req,res) => {
 
 // Helper function to get the most active user
 const getMostActiveUser = async (req,res) => {
-  // const result = await Record.aggregate([
-  //   { $match: { lending_date: { $gte: startDate } } },
-  //   { $group: { _id: '$user_id', count: { $sum: 1 } } },
-  //   { $sort: { count: -1 } },
-  //   { $limit: 1 },
-  //   { $lookup: { from: 'users', localField: '_id', foreignField: '_id', as: 'user' } },
-  //   { $unwind: '$user' },
-  //   { $project: { username: '$user.username', count: 1 } },
-  // ]);
   const query = 'select * from user_credentials order by login_count desc';
   const resp = await pool.query(query);
   // console.log("result->", resp.rows);
@@ -80,13 +71,23 @@ const getMostActiveUser = async (req,res) => {
 };
 
 // Helper function to get the oldest book
-const getOldestBook = async () => {
-  return Book.findOne().sort({ publication_date: 1 });
+const getOldestBook = async (req, res) => {
+  const query = 'select * from books order by publication_date asc';
+  const resp = await pool.query(query);
+  // console.log("result->", resp.rows);
+  const result = resp.rows[0];
+
+  res.status(200).json(result);
 };
 
 // Helper function to get the newest book
-const getNewestBook = async () => {
-  return Book.findOne().sort({ publication_date: -1 });
+const getNewestBook = async (req,res) => {
+  const query = 'select * from books order by publication_date desc';
+  const resp = await pool.query(query);
+  // console.log("result->", resp.rows);
+  const result = resp.rows[0];
+
+  res.status(200).json(result);
 };
 
 // Helper function to get the most available book
@@ -108,4 +109,6 @@ module.exports = {
   getMostActiveUser,
   getTotalUser,
   getHighestLentBook,
+  getOldestBook,
+  getNewestBook,
 };
