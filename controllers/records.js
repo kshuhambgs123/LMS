@@ -28,7 +28,7 @@ const createRecord = async (req,res) =>{
         const reqBody = req.body;
         console.log("reqbody",reqBody);
         const result  = await pool.query(
-            "insert into records (issue_date, return_date, isbn, id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.isbn, reqBody.id], (error,results)=>{
+            "insert into records (issue_date, return_date, book_id, users_id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.book_id, reqBody.users_id], (error,results)=>{
               if (error) {
                 if (error.constraint === "records_isbn_fkey") {
                   // Handle the foreign key constraint violation
@@ -55,19 +55,19 @@ const getRecordById = async (req, res) => {
   try {
     const query = `
       SELECT
-        records.recordId,
+        records.record_id,
         records.issue_date,
         records.return_date,
-        books.isbn,
+        books.id,
         users.id
       FROM
         records
       INNER JOIN
-        books ON records.isbn = books.isbn
+        books ON records.book_id = books.id
       INNER JOIN
-        users ON records.id = users.id
+        users ON records.users_id = users.id
       WHERE
-        records.recordId = $1
+        records.record_id = $1
     `;
     const values = [recordId];
     const result = await pool.query(query, values);
@@ -86,9 +86,9 @@ const getRecordById = async (req, res) => {
 // Controller function to update a record by its ID
 const updateRecordById = async (req, res) => {
   const recordId = req.params.id;
-  const { issue_date, return_date, isbn, id } = req.body;
+  const { issue_date, return_date, book_id, users_id } = req.body;
   try {
-    const checkQuery = 'SELECT * FROM records WHERE recordId = $1';
+    const checkQuery = 'SELECT * FROM records WHERE record_id = $1';
     const checkValues = [recordId];
     const checkResult = await pool.query(checkQuery, checkValues);
 
@@ -102,12 +102,12 @@ const updateRecordById = async (req, res) => {
       SET
         issue_date = $1,
         return_date = $2,
-        isbn = $3,
-        id = $4
+        book_id = $3,
+        users_id = $4
       WHERE
-        recordId = $5
+        record_id = $5
     `;
-    const updateValues = [issue_date, return_date, isbn, id, recordId];
+    const updateValues = [issue_date, return_date, book_id, users_id, recordId];
     await pool.query(updateQuery, updateValues);
 
     res.json({ message: 'Record updated successfully' });
@@ -122,7 +122,7 @@ const deleteRecordById = async (req, res) => {
   const recordId = req.params.id;
 
   try {
-    const checkQuery = 'SELECT * FROM records WHERE recordId = $1';
+    const checkQuery = 'SELECT * FROM records WHERE record_id = $1';
     const checkValues = [recordId];
     const checkResult = await pool.query(checkQuery, checkValues);
 
@@ -130,7 +130,7 @@ const deleteRecordById = async (req, res) => {
       return res.status(404).json({ error: 'Record not found' });
     }
 
-    const deleteQuery = 'DELETE FROM records WHERE recordId = $1';
+    const deleteQuery = 'DELETE FROM records WHERE record_id = $1';
     const deleteValues = [recordId];
     await pool.query(deleteQuery, deleteValues);
 
