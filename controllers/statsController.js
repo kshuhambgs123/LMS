@@ -112,7 +112,15 @@ const getTotalUser = async (req, res) => {
 const getTotalBook = async (req, res)=>{
   const query = 'select sum(copies_available) from books';
   const resp = await pool.query(query);
-  console.log("result->", resp.rows);
+  // console.log("result->", resp.rows);
+  const result = resp.rows[0];
+  res.status(200).json(result);
+}
+
+const getTotalLentBook = async (req, res)=>{
+  const query = 'select sum(lent_count) from books';
+  const resp = await pool.query(query);
+  // console.log("result->", resp.rows);
   const result = resp.rows[0];
   res.status(200).json(result);
 }
@@ -126,4 +134,5 @@ module.exports = {
   getNewestBook,
   getMostAvailableBook,
   getTotalBook,
+  getTotalLentBook
 };

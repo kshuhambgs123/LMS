@@ -11,5 +11,6 @@ router.get('/oldest-book', statsController.getOldestBook);
 router.get('/latest-book', statsController.getNewestBook);
 router.get('/most-available-book', statsController.getMostAvailableBook);
 router.get('/total-book',statsController.getTotalBook)
+router.get('/total-lent-book',statsController.getTotalLentBook)
 
 module.exports = router;
