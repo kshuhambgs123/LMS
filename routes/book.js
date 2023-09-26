@@ -1,59 +1,40 @@
+// BookRoute.js
 const express = require('express');
 const router = express.Router();
-const bookCopy = require('../controllers/copies'); // Replace with the correct path
-//const { getAllBooks } = require('../controllers/bookController');
-// GET all books
-router.get('/copies', bookCopy.getAllBookCopy);
-
-// router.get('/',bookCopy.getAllBooks);
-
-// Define the route for getting a book by ID
-router.get('/copies/:id', bookCopy.getBookCopyById);
-
-router.post('/copies', bookCopy.addCopies);
-
-// DELETE /books/:id
-router.delete('/copies/:id', bookCopy.deleteBookByCopyId);
-
-// Add more routes as needed
-// router.put('/:id',bookCopy.updateBookById);
-
-// Add more routes for CRUD operations
-
-
-
-
-
-// Define routes for CRUD operations on books
-// router.get('/', bookController.getAllBooks);
-// router.get('/:id', bookController.getBookById);
-// router.post('/', bookController.createBook);
-// router.put('/:id', bookController.updateBook);
-// router.delete('/:id', bookController.deleteBook);
-
-
 const { Book } = require('../models/book');
 const bookCont = require('../controllers/books'); // Replace with the correct path
-//const { getAllBooks } = require('../controllers/bookController');
-// GET all books
+const bookCopy = require('../controllers/copies'); // Replace with the correct path
+
+/* ------------------ BOOK ROUTES BELOW FOR GET , GET BY ID , POST , UPDATE BY ID , DELETE BY ID */
+
+// 1) GET all books - GET
 router.get('/', bookCont.getAllBooks);
 
-// router.get('/',bookCont.getAllBooks);
-
-// Define the route for getting a book by ID
+// 2) Define the route for getting a book by ID - GET
 router.get('/:id', bookCont.getBookById);
 
+// 3) Insert a  book - POST
 router.post('/', bookCont.addBook);
 
-// DELETE /books/:id
+// 4) DELETE a book by id - DELETE
 router.delete('/:id', bookCont.deleteBook);
 
-// Add more routes as needed
+// 5) Update a book by id - PUT
 router.put('/:id',bookCont.updateBookById);
 
-// Add more routes for CRUD operations
+
+// Add more routes for CRUD operations --------- FOR Multiple Copes of A Book -----------------
+// 1) GET :  all bookcopy
+router.get('/copies', bookCopy.getAllBookCopy);
+
+// 2) Get : Define the route for getting a bookcopy by copy_id
+router.get('/copies/:id', bookCopy.getBookCopyById);
+
+// 3) Post : Insert Bookcopy
+router.post('/copies', bookCopy.addCopies);
+
+// 4) DELETE : bookcopy by copy_id
+router.delete('/copies/:id', bookCopy.deleteBookByCopyId);
 
 module.exports = router;
 
-
-//module.exports = router;

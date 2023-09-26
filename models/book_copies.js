@@ -1,7 +1,6 @@
-// const { DataTypes } = require('sequelize');
-// const Sequelize = require('sequelize');
 const { DataTypes, Sequelize } = require('sequelize');
 const books = require('./book');
+
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
   host: 'localhost',
   dialect: 'postgres',
@@ -17,12 +16,9 @@ const Bookcopy = sequelize.define('book_copies', {
  },
  {  
   timestamps: false,
-//   tableName:"book_copies"
-
 });
 
 Bookcopy.belongsTo(books, {foreignKey: 'book_id'});
-
 
 // Sync the model with the database to create the table
 sequelize.sync()

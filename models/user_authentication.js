@@ -1,5 +1,4 @@
 const { DataTypes, Sequelize } = require('sequelize');
-//const sequelize = require('./connection/conn'); // Import your Sequelize connection
 
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
   host: 'localhost',
@@ -25,9 +24,12 @@ const user_credential  = sequelize.define('user_credentials', {
     login_count: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0, // Set the default value to 0 for newly created books
+        defaultValue: 0, // Set the default value to 0 for newly created profile signup
       },
-},{timestamps: false},)
+},
+{
+    timestamps: false
+},);
 
 // Ensure the table is created or updated
 sequelize.sync()

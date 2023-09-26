@@ -4,14 +4,13 @@ const user = require('./user')
 
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
   host: 'localhost',
-  dialect: 'postgres', // Change this to the appropriate dialect if using a different database
+  dialect: 'postgres', 
 });
 
 const Payment = sequelize.define('payments', {
   paymentid: {
     type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, field: 'paymentid'
   },
-  // userId: DataTypes.STRING,
   amount: DataTypes.NUMERIC(10, 2),
   payment_date: {
     type: DataTypes.STRING, // Store date as a string
@@ -37,15 +36,15 @@ const Payment = sequelize.define('payments', {
       }
     },
   },
-}, {
-  // Define table name if you want it to be different from the model name
-  // tableName: 'payments',
-  timestamps: false, // Set to true if you want to include timestamps (createdAt, updatedAt)
+}, 
+{
+  timestamps: false, // Npte : (if some issue use) Set to true if you want to include timestamps (createdAt, updatedAt)
 });
 
-
+// Define the many-to-one (belongsTo) relationship
 Payment.belongsTo(book, { foreignKey: 'book_id' });
 Payment.belongsTo(user, {foreignKey: 'users_id'});
+
 // Sync the model with the database to create the table
 sequelize.sync()
   .then(() => {

@@ -19,8 +19,4 @@ router.put('/:id', userCont.updateUserById);
 // Delete a user by ID
 router.delete('/:id', userCont.deleteUserById);
 
-
-
-
-
 module.exports = router;
