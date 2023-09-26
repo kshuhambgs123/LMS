@@ -135,7 +135,16 @@ iii) GET BY ID :  localhost:1000/books/1
 iv) PUT BY ID :  localhost:1000/books/1
 v) DELETE BY ID :  localhost:1000/books/1
 
-## 6) NOW CRUD FOR records :
+## 6) NOW for multiple copies of same book 
+ i)POST USING ID -> localhost:1000/books/copies/1
+ Body - JSON
+ {
+    "book_id" : 5
+  }
+ ii)  DELETE USING ID -> localhost:1000/books/copies/1
+ iii) GET USING ID -> localhost:1000/books/copies/1
+
+## 7) NOW CRUD FOR records :
 i) POST -> localhost:1000/records/
 Body - JSON :
 {
@@ -150,7 +159,7 @@ iii) GET BY ID :  localhost:1000/records/1
 iv) PUT BY ID :  localhost:1000/records/1
 v) DELETE BY ID :  localhost:1000/records/1
 
-## 7) NOW CRUD FOR payments :
+## 8) NOW CRUD FOR payments :
 i) POST -> localhost:1000/payments/
 Body - JSON :
 {
@@ -165,7 +174,7 @@ iii) GET BY ID :  localhost:1000/payments/1
 iv) PUT BY ID :  localhost:1000/payments/1
 v) DELETE BY ID :  localhost:1000/payments/1
 
-## 8) Stats API :
+## 9) Stats API :
 GET request ->
 ```
 localhost:1000/stats/most-active-user/
