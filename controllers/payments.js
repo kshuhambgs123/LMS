@@ -1,11 +1,12 @@
 const Pool = require('pg').Pool;
+
 const pool = new Pool({
-  dialect: 'postgres', // Use the PostgreSQL dialect
-  host: 'localhost', // Your database host
-  username: 'shubhamkumar', // Your database username
-  password: 'shubham123', // Your database password
-  database: 'shubhamkumar', // Your database name
-  port:5432
+    dialect: 'postgres', // Use the PostgreSQL dialect
+    host: 'localhost', // Your database host
+    username: 'shubhamkumar', // Your database username
+    password: 'shubham123', // Your database password
+    database: 'shubhamkumar', // Your database name
+    port:5432
 });
 
 // Controller function to create a new payment
@@ -17,7 +18,8 @@ const createPayment = async (req, res) => {
             [reqBody.amount, reqBody.payment_date, reqBody.book_id, reqBody.users_id]
         );
         res.status(201).json({ message: 'Payment created successfully.' });
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error creating payment:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -29,7 +31,8 @@ const getAllPayments = async (req, res) => {
         const query = 'SELECT * FROM payments';
         const { rows } = await pool.query(query);
         res.json(rows);
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error fetching payments:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -49,7 +52,8 @@ const getPaymentById = async (req, res) => {
         }
 
         res.status(200).json(result.rows[0]);
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error fetching payment by ID:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -82,7 +86,8 @@ const deletePaymentById = async (req, res) => {
         await pool.query(query, values);
 
         res.json({ message: 'Payment deleted successfully' });
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error deleting payment by ID:', error);
         res.status(500).json({ error: 'Internal server error' });
     }

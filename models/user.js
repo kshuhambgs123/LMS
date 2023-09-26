@@ -1,6 +1,5 @@
 const { DataTypes, Sequelize } = require('sequelize');
 const user_credentials = require('./user_authentication');
-//const sequelize = require('./connection/conn'); // Import your Sequelize connection
 
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
   host: 'localhost',
@@ -43,12 +42,12 @@ const User = sequelize.define('users', {
       }
     },
   },
-}, {
-  // tableName: 'users',
+}, 
+{
   timestamps: false,
 });
-User.belongsTo(user_credentials, {foreignKey: 'user_id'});
 
+User.belongsTo(user_credentials, {foreignKey: 'user_id'});
 
 // Sync the model with the database to create the table
 sequelize.sync()

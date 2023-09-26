@@ -1,62 +1,77 @@
 const Book_Copy = require('../models/book_copies');
 const Book = require('../models/book');
 const { login } = require('./userController');
+
 const Pool = require('pg').Pool;
+
 const pool = new Pool({
-  dialect: 'postgres', // Use the PostgreSQL dialect
-  host: 'localhost', // Your database host
-  username: 'shubhamkumar', // Your database username
-  password: 'shubham123', // Your database password
-  database: 'shubhamkumar', // Your database name
-  port:5432
+    dialect: 'postgres', // Use the PostgreSQL dialect
+    host: 'localhost', // Your database host
+    username: 'shubhamkumar', // Your database username
+    password: 'shubham123', // Your database password
+    database: 'shubhamkumar', // Your database name
+    port:5432
 });
 
-
+/*
 // Controller function to fetch  a list of bookcopy
 const getAllBookCopy = async (req, res) => {
     try {
-      const query = 'SELECT * FROM book_copies';
-      const { rows } = await pool.query(query);
-      
-      // Check if there are no books
-    if (!rows || rows.length === 0) {
-        return res.status(404).json({ message: 'No book Copy found' });
-    }
-      res.json(rows);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      res.status(500).json({ error: 'Internal server error' });
+        const query1 = 'SELECT * FROM book_copies';
+        const { rows } = await pool.query(query1);
+        
+        // Check if there are no books
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ message: 'No book Copy found' });
+        }
+        res.json(rows);
+    } 
+    catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
   };
+  */
 
+  const getAllBookCopy = async (req, res) => {
+    try {
+        console.log("error get all book copy");
+        const query = 'SELECT * FROM book_copies';
+        const { rows } = await pool.query(query);
+        res.json(rows);
+    }
+    catch (error) {
+        console.error('Error fetching book copy:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
 
-// Controller function to get a bookcopy by book_id
+// Controller function to get a bookcopy by copy_id
 const getBookCopyById = async (req, res) => {
-    const bookId = parseInt(req.params.id); // Extract the book ID from the request parameters
+    const bookId = parseInt(req.params.id); // Extract the copy_id from the request parameters
   
     try {
-      // Query the database to get the book by ID
-      const query = 'SELECT * FROM book_copies WHERE copy_id = $1';
-      const values = [bookId];
-      const result = await pool.query(query, values);
-      
-      if (result.rows.length === 0) {
-        // If no book with the specified ID is found, return a 404 response
-        return res.status(404).json({ error: 'Book Copy not found' });
-      }
-  
-      // If a book with the specified ID is found, return it as JSON
-      res.status(200).json(result.rows);
-    } catch (error) {
-      // Handle any errors that occur during the database query
-      console.error('Error fetching bookcopy by book_id:', error);
-      res.status(500).json({ error: 'Internal server error' });
+        // Query the database to get the bookcopy by copy_id
+        const query = 'SELECT * FROM book_copies WHERE copy_id = $1';
+        const values = [bookId];
+        const result = await pool.query(query, values);
+        
+        if (result.rows.length === 0) {
+            // If no book with the specified ID is found, return a 404 response
+            return res.status(404).json({ error: 'Book Copy not found' });
+        }
+    
+        // If a book with the specified ID is found, return it as JSON
+        res.status(200).json(result.rows);
+    } 
+    catch (error) {
+        // Handle any errors that occur during the database query
+        console.error('Error fetching bookcopy by book_id:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
   };
   
-
-
-// Controller function to Insert a book_copy
+// Controller function to Insert a book_copy for particular book_id available
 const addCopies = async (req,res) =>{
     try{
         const bookId = parseInt(req.body.book_id);
@@ -76,15 +91,16 @@ const addCopies = async (req,res) =>{
                 res.status(201).send("book_copies created successfully.")
             }
         );
-    }catch (error) {
+    }
+    catch (error) {
       console.error('Error creating data:', error);
       return error;
     }
-}
+};
 
 
-// Controller function to delete a book by ID
-    const deleteBookByCopyId = async (req, res) => {
+// Controller function to delete a bookcopy by copy_id and update copies_availavle count for particular book_id in books table
+const deleteBookByCopyId = async (req, res) => {
     const bookId = req.params.id;
   
     try {
@@ -103,36 +119,34 @@ const addCopies = async (req,res) =>{
         
         console.log("updated count");
 
-      const client = await pool.connect();
-      await client.query('BEGIN'); // Start a transaction
+        const client = await pool.connect();
+        await client.query('BEGIN'); // Start a transaction
   
-      // Check if the book exists
-      const bookExistsQuery = 'SELECT * FROM book_copies WHERE copy_id = $1';
-      const bookExistsResult = await client.query(bookExistsQuery, [bookId]);
+        // Check if the book exists
+        const bookExistsQuery = 'SELECT * FROM book_copies WHERE copy_id = $1';
+        const bookExistsResult = await client.query(bookExistsQuery, [bookId]);
   
-      if (bookExistsResult.rows.length === 0) {
-        await client.query('ROLLBACK'); // Rollback the transaction
-        return res.status(404).json({ error: 'Book not found' });
-      }
+        if (bookExistsResult.rows.length === 0) {
+            await client.query('ROLLBACK'); // Rollback the transaction
+            return res.status(404).json({ error: 'Book not found' });
+        }
   
-      // Delete the book 
-      const deleteQuery = 'DELETE FROM book_copies WHERE copy_id = $1';
-      await client.query(deleteQuery, [bookId]);
+        // Delete the book 
+        const deleteQuery = 'DELETE FROM book_copies WHERE copy_id = $1';
+        await client.query(deleteQuery, [bookId]);
   
-      await client.query('COMMIT'); // Commit the transaction
-      res.json({ message: 'Book_Copy deleted successfully' });
-    } catch (error) {
-      console.error('Error deleting book:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    //  } finally {
-    //   client.release(); // Release the client back to the pool
+        await client.query('COMMIT'); // Commit the transaction
+        res.json({ message: 'Book_Copy deleted successfully' });
+    } 
+    catch (error) {
+        console.error('Error deleting book:', error);
+        res.status(500).json({ error: 'Internal server error' });
      }
   };
-
 
 module.exports={
     getAllBookCopy,
     addCopies,
     getBookCopyById,
     deleteBookByCopyId
-}
+};

@@ -1,5 +1,3 @@
-// const { DataTypes } = require('sequelize');
-// const Sequelize = require('sequelize');
 const { DataTypes, Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
@@ -27,26 +25,18 @@ const Book = sequelize.define('books', {
   }, copies_available: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 1, // Set the default value to 0 for newly created books
+    defaultValue: 1, // Set the default value to 1 for newly created bookcopy
   },
   lent_count: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0, // Set the default value to 0 for newly created books
+    defaultValue: 0, // Set the default value to 0 for newly created lent books
   },
-//   createdAt: {
-//     type: Sequelize.DATE,
-//     defaultValue: Sequelize.fn('NOW'),
-// },
-// updatedAt: {
-//     type: Sequelize.DATE,
-//     defaultValue: Sequelize.fn('NOW'),
-// },
 publication_date: {
   type: DataTypes.STRING, // Store date as a string
   allowNull: false,
   get() {
-    // Custom getter method to format date when retrieving it
+    // Custom getter method to format date when retrieving it in dd-mm-yyy
     const rawDate = this.getDataValue('publication_date');
     if (rawDate) {
       const dateParts = rawDate.split('-'); // Assuming date is stored as "dd-mm-yyyy"
@@ -70,8 +60,6 @@ publication_date: {
  },
  {  
   timestamps: false,
-  // tableName:"books"
-
 });
 
 // Sync the model with the database to create the table

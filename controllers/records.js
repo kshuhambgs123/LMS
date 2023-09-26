@@ -1,102 +1,104 @@
+const book = require("../models/book");
+
 const { Pool } = require('pg');
+
 const pool = new Pool({
-  dialect: 'postgres',
-  host: 'localhost',
-  username: 'shubhamkumar',
-  password: 'shubham123',
-  database: 'shubhamkumar',
-  port: 5432,
+    dialect: 'postgres',
+    host: 'localhost',
+    username: 'shubhamkumar',
+    password: 'shubham123',
+    database: 'shubhamkumar',
+    port: 5432,
 });
-const book = require("../models/book")
 
 // Controller function to fetch list of records
 const getAllRecords = async (req, res) => {
-  try {
-    const query = `select * from records`;
-    const { rows } = await pool.query(query);
-    // console.log(rows);
-    res.json(rows);
-  } catch (error) {
-    console.error('Error fetching records:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
+    try {
+      const query = `select * from records`;
+      const { rows } = await pool.query(query);
+      // console.log(rows);
+      res.json(rows);
+    } 
+    catch (error) {
+      console.error('Error fetching records:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
 
 // Controller function to create/insert a new record
 const createRecord = async (req,res) =>{
     try{
-      // console.log(reqBody.body);
-      const reqBody = req.body;
-      console.log("reqbody",reqBody);
-      const lent_query = 'select lent_count from books where id = $1';
-      const values = [reqBody.users_id];
-      const response = await pool.query(lent_query, values);
-      const lent_count = response.rows[0].lent_count;
-      const insert_query = await pool.query(
-        "update books set lent_count = $1 where id=$2", [lent_count+1,reqBody.users_id ], (error, results)=>{
-          if (error) {
-            // res.status(500).send(error);
-            console.log("Unable to update record: ", error);
-          } else {
-            console.log("lent_count updated successfully!");
-          }
-        }
-      )
-      const result  = await pool.query(
-        "insert into records (issue_date, return_date, book_id, users_id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.book_id, reqBody.users_id], (error,results)=>{
-          if (error) {
-            if (error.constraint === "records_isbn_fkey") {
-              // Handle the foreign key constraint violation
-              res.status(400).send("The provided ISBN does not exist in the referenced table.");
+        // console.log(reqBody.body);
+        const reqBody = req.body;
+        console.log("reqbody",reqBody);
+        const lent_query = 'select lent_count from books where id = $1';
+        const values = [reqBody.users_id];
+        const response = await pool.query(lent_query, values);
+        const lent_count = response.rows[0].lent_count;
+        const insert_query = await pool.query(
+          "update books set lent_count = $1 where id=$2", [lent_count+1,reqBody.users_id ], (error, results)=>{
+            if (error) {
+              // res.status(500).send(error);
+              console.log("Unable to update record: ", error);
             } else {
-              // Handle other errors
-              console.error('Error creating data:', error);
-              res.status(500).send("An error occurred while creating the record.");
+              console.log("lent_count updated successfully!");
             }
-          } else {
-            res.status(201).send("Record created successfully.");
           }
-        }
-      );
-      
-    } catch (error) {
-      console.error('Error creating data:', error);
-      res.status(500).send("Error occurred while creating the record.");
-    }
-         
-}
+        )
+        const result  = await pool.query(
+          "insert into records (issue_date, return_date, book_id, users_id) values($1, $2, $3, $4)", [reqBody.issue_date, reqBody.return_date, reqBody.book_id, reqBody.users_id], (error,results)=>{
+            if (error) {
+              if (error.constraint === "records_isbn_fkey") {
+                // Handle the foreign key constraint violation
+                res.status(400).send("The provided ISBN does not exist in the referenced table.");
+              } else {
+                // Handle other errors
+                console.error('Error creating data:', error);
+                res.status(500).send("An error occurred while creating the record.");
+              }
+            } else {
+              res.status(201).send("Record created successfully.");
+            }
+          }
+        );
+    } 
+    catch (error) {
+        console.error('Error creating data:', error);
+        res.status(500).send("Error occurred while creating the record.");
+    }     
+};
 
 // Controller function to fetch a record by its ID
 const getRecordById = async (req, res) => {
   const recordId = req.params.id;
   try {
-    const query = `
-      SELECT
-        records.record_id,
-        records.issue_date,
-        records.return_date,
-        books.id,
-        users.id
-      FROM
-        records
-      INNER JOIN
-        books ON records.book_id = books.id
-      INNER JOIN
-        users ON records.users_id = users.id
-      WHERE
-        records.record_id = $1
-    `;
-    const values = [recordId];
-    const result = await pool.query(query, values);
+      const query = `
+        SELECT
+          records.record_id,
+          records.issue_date,
+          records.return_date,
+          books.id,
+          users.id
+        FROM
+          records
+        INNER JOIN
+          books ON records.book_id = books.id
+        INNER JOIN
+          users ON records.users_id = users.id
+        WHERE
+          records.record_id = $1
+      `;
+      const values = [recordId];
+      const result = await pool.query(query, values);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Record not found' });
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Error fetching record by ID:', error);
-    res.status(500).json({ error: 'Internal server error' });
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
+      res.json(result.rows[0]);
+  } 
+  catch (error) {
+      console.error('Error fetching record by ID:', error);
+      res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -139,29 +141,30 @@ const deleteRecordById = async (req, res) => {
   const recordId = req.params.id;
 
   try {
-    const checkQuery = 'SELECT * FROM records WHERE record_id = $1';
-    const checkValues = [recordId];
-    const checkResult = await pool.query(checkQuery, checkValues);
+      const checkQuery = 'SELECT * FROM records WHERE record_id = $1';
+      const checkValues = [recordId];
+      const checkResult = await pool.query(checkQuery, checkValues);
 
-    if (checkResult.rows.length === 0) {
-      return res.status(404).json({ error: 'Record not found' });
-    }
+      if (checkResult.rows.length === 0) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
 
-    const deleteQuery = 'DELETE FROM records WHERE record_id = $1';
-    const deleteValues = [recordId];
-    await pool.query(deleteQuery, deleteValues);
+      const deleteQuery = 'DELETE FROM records WHERE record_id = $1';
+      const deleteValues = [recordId];
+      await pool.query(deleteQuery, deleteValues);
 
-    res.json({ message: 'Record deleted successfully' });
-} catch (error) {
-console.error('Error deleting record by ID:', error);
-res.status(500).json({ error: 'Internal server error' });
-}
+      res.json({ message: 'Record deleted successfully' });
+  } 
+  catch (error) {
+      console.error('Error deleting record by ID:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 module.exports = {
-getAllRecords,
-createRecord,
-getRecordById,
-updateRecordById,
-deleteRecordById,
+    getAllRecords,
+    createRecord,
+    getRecordById,
+    updateRecordById,
+    deleteRecordById,
 };

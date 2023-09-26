@@ -57,10 +57,11 @@ const Record = sequelize.define('records', {
       }
     },
   }
-}, {
-  // tableName: 'records',
+}, 
+{
   timestamps: false,
 });
+
 // Define the many-to-one (belongsTo) relationship
 Record.belongsTo(books, { foreignKey: 'book_id' });
 Record.belongsTo(users, {foreignKey: 'users_id'});
