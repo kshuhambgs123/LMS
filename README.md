@@ -80,97 +80,94 @@ Now install thunder client in visual studio to Thunder Client is a popular REST 
 
 Sending HTTP Requests: Thunder Client allows you to easily create and send HTTP requests to your API endpoints. You can specify the HTTP method, headers, request body, and URL parameters.
 
-1) POST -> localhost:1000/profile/signup/
+## 1) POST -> localhost:1000/profile/signup/
 body : JSON 
- ```  
    {
     "user_name":"sk001",
     "email":"sk001@gmail.com",
     "password":"123001"
     }
-  ```
+
 Then click send and you got user_credential data in table. 
 After signup : now again go to new request : for login where login count is updated in user credentials
 
-2)  POST -> localhost:1000/profile/login/
+## 2)  POST -> localhost:1000/profile/login/
 body : JSON 
-```
 {
   "email":"sk001@gmail.com",
     "password":"123001"
- }```
+ }
  After request send in terminal a token is generated save that token for authentication for further request which is 
  proceeded after authentication : Save Token for further request go to header Add Authorization in header and token in 
  values.
 
-3) POST -> localhost:1000/profile/logout/
+## 3) POST -> localhost:1000/profile/logout/
 Click send and it will be successfully logout.
 
-4) NOW CRUD FOR users :
+## 4) NOW CRUD FOR users :
 i) POST -> localhost:1000/users/
 Body - JSON :
-``` {
+{
   "name": "Ram",
   "category": "Student",
   "registration_date": "15-09-2023",
   "user_id":"1"
-  }```
+  }
 
 ii) GET -> localhost:1000/users/
 iii) GET BY ID :  localhost:1000/users/1
 iv) PUT BY ID :  localhost:1000/users/1
 v) DELETE BY ID :  localhost:1000/users/1
 
-5) NOW CRUD FOR books :
+## 5) NOW CRUD FOR books :
 i) POST -> localhost:1000/books/
 Body - JSON :
-``` {
+ {
     "title": "book",
     "author": "Shubham",
     "isbn": 100000,
     "subject": "Computer",
     "publication_date": "25-10-2005"
-  }````
+  }
 
 ii) GET -> localhost:1000/users/
 iii) GET BY ID :  localhost:1000/books/1
 iv) PUT BY ID :  localhost:1000/books/1
 v) DELETE BY ID :  localhost:1000/books/1
 
-6) NOW CRUD FOR records :
+## 6) NOW CRUD FOR records :
 i) POST -> localhost:1000/records/
 Body - JSON :
-```{
+{
   "issue_date": "10-08-2023",
   "return_date": "25-09-2023", 
   "book_id": 1, 
   "users_id": 1 
 }
-````
 
 ii) GET -> localhost:1000/records/
 iii) GET BY ID :  localhost:1000/records/1
 iv) PUT BY ID :  localhost:1000/records/1
 v) DELETE BY ID :  localhost:1000/records/1
 
-7) NOW CRUD FOR payments :
+## 7) NOW CRUD FOR payments :
 i) POST -> localhost:1000/payments/
 Body - JSON :
-```{
+{
     "amount": 400.00,                  
     "payment_date": "20-05-2023",
     "book_id": 1,           
     "users_id": 1
   }
-````
 
 ii) GET -> localhost:1000/payments/
 iii) GET BY ID :  localhost:1000/payments/1
 iv) PUT BY ID :  localhost:1000/payments/1
 v) DELETE BY ID :  localhost:1000/payments/1
 
-8) Stats API :
+## 8) Stats API :
 GET request ->
+```
 localhost:1000/stats/most-active-user/
 localhost:1000/stats/total-lent-book/
 localhost:1000/total-book/
@@ -179,4 +176,5 @@ localhost:1000/latest-book/
 localhost:1000/oldest-book/
 localhost:1000/highest-lent-book/
 localhost:1000/total-user/
+```
 
