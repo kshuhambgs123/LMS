@@ -210,11 +210,11 @@ i) POST -> ```localhost:1000/payments/```
 
 Body - JSON :
 {```
-    "amount": 400.00,                  
-    "payment_date": "20-05-2023",
-    "book_id": 1,           
-    "users_id": 1```
-  }
+  "amount": 400.00,                  
+  "payment_date": "20-05-2023",
+  "book_id": 1,           
+  "users_id": 1```
+}
 
 ii) GET -> ```localhost:1000/payments/```
 
@@ -230,12 +230,12 @@ GET request ->
 ```
 localhost:1000/stats/most-active-user/
 localhost:1000/stats/total-lent-book/
-localhost:1000/total-book/
-localhost:1000/most-available-book/
-localhost:1000/latest-book/
-localhost:1000/oldest-book/
-localhost:1000/highest-lent-book/
-localhost:1000/total-user/
+localhost:1000/stats/total-book/
+localhost:1000/stats/most-available-book/
+localhost:1000/stats/latest-book/
+localhost:1000/stats/oldest-book/
+localhost:1000/stats/highest-lent-book/
+localhost:1000/stats/total-user/
 
 ```
 
