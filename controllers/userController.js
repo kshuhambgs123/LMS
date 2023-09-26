@@ -105,16 +105,24 @@ const login = async (req, res) => {
     }
 };
 
-/*
 // Logout function
 const logout = (req, res) => {
     try {
       // Clear the JWT token on the client-side by setting its expiration to a past date
       res.cookie("jwt", "", { expires: new Date(0), httpOnly: true });
       
-      // Optionally, clear any session data you might have on the server
-      // For example, if you're using Express sessions:
-      req.session.destroy();
+    // Optionally, clear any session data you might have on the server
+    // For example, if you're using Express sessions:
+    //   req.session.destroy((error) => {
+    //     if (error) {
+    //       console.error('Error destroying session:', error);
+    //       res.status(500).send('An error occurred during logout');
+    //     } else {
+    //       // Logout was successful
+    //       res.clearCookie('jwt');
+    //       res.redirect('/logout-success');
+    //     }
+    //   });
       
       // Return a successful logout response
       res.status(200).send("Logout successful");
@@ -123,39 +131,6 @@ const logout = (req, res) => {
       res.status(500).send("An error occurred during logout");
     }
   };
-  */
-
- // Logout function
-const logout = (req, res) => {
-    try {
-      // Check if a session exists before attempting to destroy it
-      if (req.session) {
-        // Destroy the session
-        req.session.destroy((error) => {
-          if (error) {
-            console.error("Error destroying session:", error);
-            res.status(500).send("An error occurred during logout");
-          } else {
-            // Clear the JWT token on the client-side by setting its expiration to a past date
-            res.cookie("jwt", "", { expires: new Date(0), httpOnly: true });
-            
-            // Return a successful logout response
-            res.status(200).send("Logout successful");
-          }
-        });
-      } else {
-        // If no session exists, still clear the JWT token
-        res.cookie("jwt", "", { expires: new Date(0), httpOnly: true });
-        
-        // Return a successful logout response
-        res.status(200).send("Logout successful");
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("An error occurred during logout");
-    }
-};
-  
 
 // Export the function
 module.exports = {

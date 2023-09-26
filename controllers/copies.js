@@ -15,23 +15,6 @@ const pool = new Pool({
 
 /*
 // Controller function to fetch  a list of bookcopy
-const getAllBookCopy = async (req, res) => {
-    try {
-        const query1 = 'SELECT * FROM book_copies';
-        const { rows } = await pool.query(query1);
-        
-        // Check if there are no books
-        if (!rows || rows.length === 0) {
-            return res.status(404).json({ message: 'No book Copy found' });
-        }
-        res.json(rows);
-    } 
-    catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-  };
-  */
 
   const getAllBookCopy = async (req, res) => {
     try {
@@ -45,6 +28,7 @@ const getAllBookCopy = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+*/
 
 // Controller function to get a bookcopy by copy_id
 const getBookCopyById = async (req, res) => {
@@ -145,7 +129,7 @@ const deleteBookByCopyId = async (req, res) => {
   };
 
 module.exports={
-    getAllBookCopy,
+    // getAllBookCopy,
     addCopies,
     getBookCopyById,
     deleteBookByCopyId

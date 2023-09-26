@@ -25,7 +25,7 @@ router.put('/:id',bookCont.updateBookById);
 
 // Add more routes for CRUD operations --------- FOR Multiple Copes of A Book -----------------
 // 1) GET :  all bookcopy
-router.get('/copies', bookCopy.getAllBookCopy);
+// router.get('/copies', bookCopy.getAllBookCopy);
 
 // 2) Get : Define the route for getting a bookcopy by copy_id
 router.get('/copies/:id', bookCopy.getBookCopyById);
