@@ -162,7 +162,7 @@ Body - JSON :
     "publication_date": "25-10-2005"```
   }
 
-ii) GET -> ```localhost:1000/users/```
+ii) GET -> ```localhost:1000/books/```
 
 iii) GET BY ID :  ```localhost:1000/books/1```
 
