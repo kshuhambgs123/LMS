@@ -1,4 +1,4 @@
-const book = require("../models/book");
+// const book = require("../models/book");
 
 const { Pool } = require('pg');
 
@@ -16,7 +16,6 @@ const getAllRecords = async (req, res) => {
     try {
       const query = `select * from records`;
       const { rows } = await pool.query(query);
-      // console.log(rows);
       res.json(rows);
     } 
     catch (error) {
@@ -28,17 +27,14 @@ const getAllRecords = async (req, res) => {
 // Controller function to create/insert a new record
 const createRecord = async (req,res) =>{
     try{
-        // console.log(reqBody.body);
         const reqBody = req.body;
-        console.log("reqbody",reqBody);
         const lent_query = 'select lent_count from books where id = $1';
-        const values = [reqBody.users_id];
+        const values = [reqBody.book_id];
         const response = await pool.query(lent_query, values);
         const lent_count = response.rows[0].lent_count;
         const insert_query = await pool.query(
-          "update books set lent_count = $1 where id=$2", [lent_count+1,reqBody.users_id ], (error, results)=>{
+          "update books set lent_count = $1 where id = $2", [lent_count+1,reqBody.book_id ], (error, results)=>{
             if (error) {
-              // res.status(500).send(error);
               console.log("Unable to update record: ", error);
             } else {
               console.log("lent_count updated successfully!");
@@ -56,7 +52,8 @@ const createRecord = async (req,res) =>{
                 console.error('Error creating data:', error);
                 res.status(500).send("An error occurred while creating the record.");
               }
-            } else {
+            }
+            else {
               res.status(201).send("Record created successfully.");
             }
           }
@@ -110,11 +107,9 @@ const updateRecordById = async (req, res) => {
     const checkQuery = 'SELECT * FROM records WHERE record_id = $1';
     const checkValues = [recordId];
     const checkResult = await pool.query(checkQuery, checkValues);
-
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ error: 'Record not found' });
     }
-
     const updateQuery = `
       UPDATE
         records
@@ -139,6 +134,7 @@ const updateRecordById = async (req, res) => {
 // Controller function to delete a record by its ID
 const deleteRecordById = async (req, res) => {
   const recordId = req.params.id;
+  console.log("id->",recordId);
 
   try {
       const checkQuery = 'SELECT * FROM records WHERE record_id = $1';
@@ -148,7 +144,21 @@ const deleteRecordById = async (req, res) => {
       if (checkResult.rows.length === 0) {
         return res.status(404).json({ error: 'Record not found' });
       }
+      const book_id = checkResult.rows[0].book_id;
+      const lent_query = 'select lent_count from books where id = $1';
+      const values = [book_id];
+      const response = await pool.query(lent_query, values);
+      const lent_count = response.rows[0].lent_count;
 
+        const insert_query = await pool.query(
+          "update books set lent_count = $1 where id = $2", [lent_count-1,book_id ], (error, results)=>{
+            if (error) {
+              console.log("Unable to update record: ", error);
+            } else {
+              console.log("lent_count updated successfully!");
+            }
+          }
+        )
       const deleteQuery = 'DELETE FROM records WHERE record_id = $1';
       const deleteValues = [recordId];
       await pool.query(deleteQuery, deleteValues);

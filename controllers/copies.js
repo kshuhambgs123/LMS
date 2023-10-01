@@ -1,7 +1,3 @@
-const Book_Copy = require('../models/book_copies');
-const Book = require('../models/book');
-const { login } = require('./userController');
-
 const Pool = require('pg').Pool;
 
 const pool = new Pool({
@@ -12,23 +8,6 @@ const pool = new Pool({
     database: 'shubhamkumar', // Your database name
     port:5432
 });
-
-/*
-// Controller function to fetch  a list of bookcopy
-
-  const getAllBookCopy = async (req, res) => {
-    try {
-        console.log("error get all book copy");
-        const query = 'SELECT * FROM book_copies';
-        const { rows } = await pool.query(query);
-        res.json(rows);
-    }
-    catch (error) {
-        console.error('Error fetching book copy:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-};
-*/
 
 // Controller function to get a bookcopy by copy_id
 const getBookCopyById = async (req, res) => {

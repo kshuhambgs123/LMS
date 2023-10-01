@@ -1,6 +1,6 @@
 const { DataTypes, Sequelize } = require('sequelize');
 const user_credentials = require('./user_authentication');
-
+// const db = require('../databasepg');
 const sequelize = new Sequelize('shubhamkumar', 'shubhamkumar', 'shubham123', {
   host: 'localhost',
   dialect: 'postgres',

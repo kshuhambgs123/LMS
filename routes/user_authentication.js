@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const authenticate = require('../middleware/authenticate');
-const { User } = require('../models/user_authentication');
 const userCredCont = require('../controllers/userController');
 const userAuth = require('../middleware/userAuth');
 const { signup, login, logout } = userCredCont;

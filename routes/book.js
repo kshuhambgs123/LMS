@@ -1,11 +1,10 @@
 // BookRoute.js
 const express = require('express');
 const router = express.Router();
-const { Book } = require('../models/book');
 const bookCont = require('../controllers/books'); // Replace with the correct path
 const bookCopy = require('../controllers/copies'); // Replace with the correct path
 
-/* ------------------ BOOK ROUTES BELOW FOR GET , GET BY ID , POST , UPDATE BY ID , DELETE BY ID */
+// /* ------------------ BOOK ROUTES BELOW FOR GET , GET BY ID , POST , UPDATE BY ID , DELETE BY ID */
 
 // 1) GET all books - GET
 router.get('/', bookCont.getAllBooks);

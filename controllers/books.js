@@ -14,7 +14,6 @@ const getAllBooks = async (req, res) => {
     try {
         const query = 'SELECT * FROM books';
         const { rows } = await pool.query(query);
-      
         // Check if there are no books
         if (!rows || rows.length === 0) {
             return res.status(404).json({ message: 'No books found' });
@@ -41,7 +40,6 @@ const getBookById = async (req, res) => {
             // If no book with the specified ID is found, return a 404 response
             return res.status(404).json({ error: 'Book not found' });
         }
-        // console.log("error->",result.rows);
         // If a book with the specified ID is found, return it as JSON
         res.status(200).json(result.rows[0]);
     }
@@ -55,7 +53,6 @@ const getBookById = async (req, res) => {
 // Controller function to Insert a book 
 const addBook = async (req,res) =>{
     try{
-        // console.log(reqBody.body);
         const reqBody = req.body;
         const result  = await pool.query(
             "insert into books (title, author, isbn, subject, publication_date) values($1, $2, $3, $4, $5)", [reqBody.title, reqBody.author, reqBody.isbn, reqBody.subject, reqBody.publication_date], (error,results)=>{
