@@ -74,6 +74,8 @@ The --save flag updates your package.json file with the dependency information.
 "npm install nodemon --save-dev": 
 This installs Nodemon as a development dependency and also updates your package.json file. 
 
+Note : First use this before running application ```npx sequelize-cli db:migrate``` to create table using migration. then run ```node app.js```
+
 Nodemon is a utility that helps automatically restart your Node.js application when you make code changes during development.
 
 After running these commands, you can start your Node.js application with Nodemon using:
@@ -141,6 +143,18 @@ Body - JSON :
   }
 
 ii) GET -> ```localhost:1000/users/```
+ 
+ ## Search user using  name , Filter using category , Sort using name and registration_date : in Query parameter pass parameter and its value
+
+ a) Search : GET -> ```localhost:1000/users/search?name=Shubham```
+
+ b) Filter : GET -> ```localhost:1000/users/filter?category=Librarian```
+ 
+ c) Sort : GET -> ```{ localhost:1000/users/sort?field=name } ``` sort using name 
+ 
+ in ascending order  OR {``` localhost:1000/users/sort?field=registration_date ```}
+
+ sort using registration date in descending order.
 
 iii) GET BY ID :  ```localhost:1000/users/1```
 

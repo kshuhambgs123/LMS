@@ -41,7 +41,6 @@ const getAllPayments = async (req, res) => {
 // Controller function to fetch a payment by ID
 const getPaymentById = async (req, res) => {
     const paymentId = parseInt(req.params.id);
-
     try {
         const query = 'SELECT * FROM payments WHERE paymentid = $1';
         const values = [paymentId];
@@ -50,7 +49,6 @@ const getPaymentById = async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Payment not found' });
         }
-
         res.status(200).json(result.rows[0]);
     } 
     catch (error) {
@@ -63,12 +61,10 @@ const getPaymentById = async (req, res) => {
 const updatePaymentById = async (req, res) => {
     const paymentId = parseInt(req.params.id);
     const { amount, payment_date, book_id, users_id } = req.body;
-
     try {
         const query = 'UPDATE payments SET amount = $1, payment_date = $2, book_id = $3, users_id = $4 WHERE paymentid = $5';
         const values = [amount, payment_date, book_id, users_id, paymentId];
         await pool.query(query, values);
-
         res.status(200).json({ message: 'Payment updated successfully' });
     } catch (error) {
         console.error('Error updating payment by ID:', error);
@@ -79,7 +75,6 @@ const updatePaymentById = async (req, res) => {
 // Controller function to delete a payment by ID
 const deletePaymentById = async (req, res) => {
     const paymentId = parseInt(req.params.id);
-
     try {
         const query = 'DELETE FROM payments WHERE paymentid = $1';
         const values = [paymentId];

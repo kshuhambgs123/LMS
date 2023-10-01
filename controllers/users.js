@@ -40,6 +40,62 @@ const createUser = async (req,res) =>{
     }
 };
 
+// get : search using name
+const searchUser = async(req, res)=>{
+   const name = req.query.name;
+    try{
+        const query  = "select * from users where name=$1";
+        const values = [name];
+        const result = await pool.query(query, values);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+            }
+            res.json(result.rows[0]);
+    }
+    catch (error) {
+        console.error('Error fetching user by ID:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// filter using category 
+const filterUser = async(req, res)=>{
+   const name = req.query.category;
+        try{
+           const query  = "select * from users where category=$1";
+           const values = [name];
+           const result = await pool.query(query, values);
+           if (result.rows.length === 0) {
+               return res.status(404).json({ error: 'Category not found' });
+               }
+               res.json(result.rows);
+        }
+        catch (error) {
+           console.error('Error fetching user by category:', error);
+           res.status(500).json({ error: 'Internal server error' });
+        }
+};
+
+// sort user using request paramenter sort: {name: ‘asc’, registration_date: ‘desc’}
+const sortUser = async (req, res) => {
+    const { field } = req.query;
+    try {
+        let query = 'SELECT * FROM users';
+        if (field === 'name') {
+            query += ' ORDER BY name ASC';
+        } else if (field === 'registration_date') {
+            //query += ' ORDER BY registration_date DESC';
+              query += ` ORDER BY TO_DATE(registration_date, \'DD-MM-YYYY') ASC`;
+        }
+        const { rows } = await pool.query(query);
+        res.json(rows);
+    } catch (error) {
+        console.error('Error sorting users:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
 // Controller function to get a user by their ID
 const getUserById = async (req, res) => {
     const userId = req.params.id;
@@ -48,11 +104,9 @@ const getUserById = async (req, res) => {
         const query = 'SELECT * FROM users WHERE id = $1';
         const values = [userId];
         const result = await pool.query(query, values);
-
         if (result.rows.length === 0) {
         return res.status(404).json({ error: 'User not found' });
         }
-
         res.json(result.rows[0]);
     }
     catch (error) {
@@ -115,6 +169,9 @@ const deleteUserById = async (req, res) => {
 module.exports = {
     getAllUsers,
     createUser,
+    searchUser,
+    filterUser,
+    sortUser,
     getUserById,
     updateUserById,
     deleteUserById,

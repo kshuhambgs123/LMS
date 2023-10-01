@@ -1,7 +1,7 @@
 // RecordRoutes.js
 const express = require('express');
 const router = express.Router();
-const { Record } = require('../models/record');
+// const { Record } = require('../models/record');
 const recordCont = require('../controllers/records');
 
 router.get('/', recordCont.getAllRecords);

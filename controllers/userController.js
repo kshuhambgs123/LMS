@@ -15,7 +15,7 @@ const pool = new Pool({
   port: 5432,
 });
 
-//signing a user up -> profile/signup
+//Post : signing a user up -> profile/signup
 //hashing users password before its saved to the database with bcrypt
 const signup = async (req, res) => {
     try {
@@ -53,7 +53,7 @@ const signup = async (req, res) => {
 };
 
 
-//login authentication after profile signup
+//Post : login authentication after profile signup
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -78,7 +78,7 @@ const login = async (req, res) => {
 
                 //if password matches with the one in the database go ahead and generate a cookie for the user
                 res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-                // console.log("user", JSON.stringify(user, null, 2));
+                console.log("user", JSON.stringify(user, null, 2));
                 console.log(token);
 
                 // login count query performed to get user login count
@@ -105,24 +105,11 @@ const login = async (req, res) => {
     }
 };
 
-// Logout function
+//Post: Logout function
 const logout = (req, res) => {
     try {
       // Clear the JWT token on the client-side by setting its expiration to a past date
       res.cookie("jwt", "", { expires: new Date(0), httpOnly: true });
-      
-    // Optionally, clear any session data you might have on the server
-    // For example, if you're using Express sessions:
-    //   req.session.destroy((error) => {
-    //     if (error) {
-    //       console.error('Error destroying session:', error);
-    //       res.status(500).send('An error occurred during logout');
-    //     } else {
-    //       // Logout was successful
-    //       res.clearCookie('jwt');
-    //       res.redirect('/logout-success');
-    //     }
-    //   });
       
       // Return a successful logout response
       res.status(200).send("Logout successful");
