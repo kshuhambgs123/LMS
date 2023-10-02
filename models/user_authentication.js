@@ -34,7 +34,7 @@ const user_credential  = sequelize.define('user_credentials', {
 // Ensure the table is created or updated
 sequelize.sync()
   .then(() => {
-    console.log('User credentials table created successfully.');
+    console.log(" ");
   })
   .catch(err => {
     console.error('Error creating user credentials table:', err);
