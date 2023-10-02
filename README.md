@@ -61,7 +61,7 @@ To run the application, move to the source folder i.e. the folder contains 'pack
 To install Express and Nodemon for a Node.js project, you can use npm (Node Package Manager) commands.
 If you haven't already initialized your Node.js project ```npm init```
 
-Follow the prompts to create a package.json file if you don't have one.
+Follow the prompts to install express if you don't have one.
 ```
    npm install express --save
    npm install nodemon --save-dev
@@ -74,12 +74,10 @@ The --save flag updates your package.json file with the dependency information.
 "npm install nodemon --save-dev": 
 This installs Nodemon as a development dependency and also updates your package.json file. 
 
-Note : First use this before running application ```npx sequelize-cli db:migrate``` to create table using migration. then run ```node app.js```
+Note : First use this before running application ```npx sequelize-cli db:migrate``` to create table using migration. After running these commands, you can start your Node.js application with Nodemon using:
+```npx nodemon app.js``` I will started successfully.
 
 Nodemon is a utility that helps automatically restart your Node.js application when you make code changes during development.
-
-After running these commands, you can start your Node.js application with Nodemon using:
-```npx nodemon app.js```
 
 Nodemon will monitor your files for changes and restart the server automatically when changes are detected, making the development process smoother.
 
