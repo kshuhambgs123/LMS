@@ -119,15 +119,13 @@ body : JSON
     "password":"123001"```
  }
  
-After request send in terminal a token is generated save that token for authentication.
+After request send in terminal for login a token is generated is printed in terminal .Please save / copy that token for authentication.
 
 For further request which is proceeded after authentication : 
-Save Token for further request go to header Add Authorization in header and token in values.
+Save Token for further request go to header Add Authorization in header and token (generated that you copied after login) in values.
 
-## 3) POST -> localhost:1000/profile/logout/
-Click send and it will be successfully logout.
 
-## 4) NOW CRUD FOR users :
+## 3) NOW CRUD FOR users :
 
 i) POST -> ```localhost:1000/users/```
 
@@ -160,7 +158,7 @@ iv) PUT BY ID : ``` localhost:1000/users/1```
 
 v) DELETE BY ID :  ```localhost:1000/users/1```
 
-## 5) NOW CRUD FOR books :
+## 4) NOW CRUD FOR books :
 
 i) POST -> ```localhost:1000/books/```
 
@@ -182,7 +180,7 @@ iv) PUT BY ID :  ```localhost:1000/books/1```
 
 v) DELETE BY ID :  ```localhost:1000/books/1```
 
-## 6) NOW for multiple copies of same book 
+## 5) NOW for multiple copies of same book 
 
  i)POST USING ID -> ```localhost:1000/books/copies/1```
  
@@ -196,7 +194,7 @@ v) DELETE BY ID :  ```localhost:1000/books/1```
  
  iii) GET USING ID -> ```localhost:1000/books/copies/1```
 
-## 7) NOW CRUD FOR records :
+## 6) NOW CRUD FOR records :
 i) POST -> ```localhost:1000/records/```
 
 Body - JSON :
@@ -216,7 +214,7 @@ iv) PUT BY ID :  ```localhost:1000/records/1```
 
 v) DELETE BY ID :  ```localhost:1000/records/1```
 
-## 8) NOW CRUD FOR payments :
+## 7) NOW CRUD FOR payments :
 
 i) POST -> ```localhost:1000/payments/```
 
@@ -236,7 +234,7 @@ iv) PUT BY ID : ```localhost:1000/payments/1```
 
 v) DELETE BY ID : ```localhost:1000/payments/1```
 
-## 9) Stats API :
+## 8) Stats API :
 
 GET request ->
 ```
@@ -250,4 +248,5 @@ localhost:1000/stats/highest-lent-book/
 localhost:1000/stats/total-user/
 
 ```
-
+## 9) POST -> localhost:1000/profile/logout/
+Click send and it will be successfully logout.
