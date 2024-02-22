@@ -1,5 +1,5 @@
 # LMS
-Distronix Backend Recruitment Test - LMS API
+Backend LMS API
 
 ## CRUD-Using-Nodejs-PostgreSQL
 This repository showcases a Learning Management System (LMS) application that demonstrates CRUD operations, statistics , and robust user authentication features. 
